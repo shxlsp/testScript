@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .myBox {
+        position: relative;
+        left: 50px;
+        top: 50px;
+        width: 200px;
+        height: 200px;
+        cursor: pointer;
+        background-color: red;
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .breatheAnimation {
+        animation: breatheAnimation 2s linear infinite;
+    }
+
+    @keyframes breatheAnimation {
+        0% {
+            transform: scale(1);
+            box-shadow: 0px 0px 0px rgb(255, 56, 56);
+        }
+
+        50% {
+            transform: scale(1.02);
+            box-shadow: 0px 0px 40px rgb(255, 56, 56);
+        }
+
+        100% {
+            transform: scale(1);
+            box-shadow: 0px 0px 0px rgb(255, 56, 56);
+        }
+    }
+
+
+
+
+    /* .moveTo {
+        left: 200px
+    } */
+
+    /* animation: myAnimate 2s ease-in 3 2s; */
+</style>
+
+<body>
+    <div class="myBox">
+        <!-- <img
+            src="https://user-images.githubusercontent.com/6876788/96633009-d1818000-1318-11eb-9f1d-7f914f4ccb16.gif" /> -->
+    </div>
+
+    <script>
+        //  if (classList.contains('moveTo')) {
+        //         element.classList.remove('moveTo')
+        //         return;
+        //     }
+        const element = document.querySelector('.myBox')
+        element.addEventListener('mouseenter', () => {
+            const { classList } = element
+            element.classList.add('breatheAnimation')
+        })
+        element.addEventListener('mouseleave', () => {
+            const { classList } = element
+            element.classList.remove('breatheAnimation')
+        })
+    </script>
+
+</body>
+
+</html>

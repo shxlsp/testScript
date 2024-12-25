@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .box {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 200px;
+        background-color: red;
+    }
+</style>
+
+<body>
+    <div class="box"></div>
+    <script>
+
+        function createOptimizedCubicBezier(x1, y1, x2, y2) {
+            // 计算多项式系数
+            const cx = 3.0 * x1;
+            const bx = 3.0 * (x2 - x1) - cx;
+            const ax = 1.0 - cx - bx;
+
+            const cy = 3.0 * y1;
+            const by = 3.0 * (y2 - y1) - cy;
+            const ay = 1.0 - cy - by;
+
+            function sampleCurveX(t) {
+                return ((ax * t + bx) * t + cx) * t;
+            }
+
+            function sampleCurveY(t) {
+                return ((ay * t + by) * t + cy) * t;
+            }
+
+            function sampleCurveDerivativeX(t) {
+                return (3.0 * ax * t + 2.0 * bx) * t + cx;
+            }
+
+            function solveCurveX(x) {
+                let t = x;
+                // Newton-Raphson 迭代
+                for (let i = 0; i < 8; i++) {
+                    const x2 = sampleCurveX(t);
+                    if (Math.abs(x2 - x) < 1e-7) {
+                        return t;
+                    }
+                    const d2 = sampleCurveDerivativeX(t);
+                    if (Math.abs(d2) < 1e-6) {
+                        break;
+                    }
+                    t = t - (x2 - x) / d2;
+                }
+                return t;
+            }
+
+            return function (x) {
+                if (x === 0 || x === 1) {
+                    return x;
+                }
+                return sampleCurveY(solveCurveX(x));
+            };
+        }
+        const fast = createOptimizedCubicBezier(0.00, 0.74, 1.00, 0.86)
+        // 使用示例
+        const easeOutCubic = createOptimizedCubicBezier(0.33, 1, 0.68, 1);
+        const timeFunctionObj = {
+            easeInQuart(x) {
+                return x * x * x * x;
+            },
+            easeInQuart1(x) {
+                return x * x;
+            },
+            easeOutElastic(x) {
+                const c4 = (2 * Math.PI) / 3;
+
+                return x === 0
+                    ? 0
+                    : x === 1
+                        ? 1
+                        : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
+            },
+            easeOutQuint(x) {
+                return 1 - Math.pow(1 - x, 5);
+            },
+            easeOutCubic(x) {
+                return 1 - Math.pow(1 - x, 3);
+            },
+            fast
+        }
+
+        function getNowPath(nowDuration, duration, totalLength, timeFunction = 'fast') {
+            return timeFunctionObj[timeFunction](nowDuration / duration) * totalLength
+        }
+
+        const startAnimate = (duration = 30 * 1000) => {
+            const element = document.querySelector('.box');
+            const frameRate = 1000 / 60;
+
+            let nowDuration = 0;
+            // 3-12s
+            const xDuration = (1 + Math.random() * 3) * 1000;
+            // 3-16s
+            const yDuration = (1 + Math.random() * 7) * 1000;
+
+            let xDirection = 1;
+            let yDirection = 1;
+            const getDirection = (nowDuration, durationDuration) => {
+                // x翻转过几次 -1 ^ 翻转次数次方
+                return Math.pow(-1, Math.floor(nowDuration / durationDuration))
+            }
+
+            const animation = () => {
+                const { width, height } = document.body.getBoundingClientRect();
+                const { x, y, width: elWidth, height: elHeight } = element.getBoundingClientRect();
+
+                const totalLeft = width - elWidth;
+                const totalTop = height - elHeight;
+                xDirection = getDirection(nowDuration, xDuration);
+                yDirection = getDirection(nowDuration, yDuration);
+
+                let nowLeft = getNowPath(nowDuration % xDuration, xDuration, totalLeft);
+                let nowTop = getNowPath(nowDuration % yDuration, yDuration, totalTop);
+
+                if (xDirection < 0) {
+                    nowLeft = totalLeft - nowLeft;
+                }
+
+                if (yDirection < 0) {
+                    nowTop = totalTop - nowTop;
+                }
+
+                element.style.transform = `translate(${nowLeft}px, ${nowTop}px)`
+            }
+            const startTime = +new Date();
+            let runStartTime = startTime;
+            let interval = 0;
+            const run = () => {
+                nowDuration += frameRate;
+
+                // 计算timeout差值
+                let newTime = +new Date();
+                interval = newTime - runStartTime;
+                runStartTime = newTime;
+                const diffTime = interval - frameRate;
+                if (diffTime > frameRate) {
+                    console.error(diffTime)
+                }
+                if (nowDuration >= duration) {
+                    console.warn('实际总持续时长', (startTime - +new Date) / 1000, 's')
+                    return;
+                }
+
+                setTimeout(() => {
+                    animation();
+                    run();
+                }, frameRate - diffTime);
+            }
+            run();
+        }
+
+        startAnimate();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .star-container {
+        width: 200px;
+        height: 200px;
+        position: relative;
+        margin: 50px auto;
+        background-color: black;
+      }
+
+      .star {
+        width: 100%;
+        height: 100%;
+        filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.9));
+        animation: fadeIn 1.5s ease-out, float 3s ease-in-out infinite;
+        opacity: 0;
+        animation-fill-mode: forwards;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+          filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9));
+        }
+        50% {
+          transform: translateY(
+            -20px
+          ); /* Increased movement for more dynamic feel */
+          filter: drop-shadow(
+            0 0 30px rgba(255, 255, 255, 1)
+          ); /* Increased shadow for more depth */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="star-container">
+      <img class="star" src="./cultureStar.png" alt="glowing star" />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<meta name="importmap-type" content="systemjs-importmap" />
+
+		<script type="systemjs-importmap">
+			{
+				"imports": {
+					"antd": "https://storage.360buyimg.com/joyspace-statics/npm/antd_4.3.5.min.js",
+					"axios": "http://storage.360buyimg.com/joyspace-statics/npm/axios_0.24.0.min.js",
+					"moment": "https://storage.360buyimg.com/joyspace-statics/npm/moment_2.29.1.min.js",
+					"react": "https://storage.360buyimg.com/joyspace-statics/npm/react.production_16.13.1.min.js",
+					"react-dom": "https://storage.360buyimg.com/joyspace-statics/npm/react-dom_16.13.1.production.min.js",
+					"single-spa": "https://storage.360buyimg.com/joyspace-statics/npm/single-spa_5.9.0.min.js"
+				}
+			}
+		</script>
+		<script type="systemjs-importmap">
+			{
+				"imports": {
+					"@jd/ee-user-selection-modal": "https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-ee-user-selection-modal/20240829203525/jd_ee-user-selection-modal-1.1.16-0-f468e616.js",
+					"@jd/jdit-meetingreserve": "https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-jdit-meetingreserve/20240816171447/jd-jdit-meetingreserve-1.0.0-b0dba5d0.js",
+					"@jd/joyday-detail-view": "https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-joyday-detail-view/20240909201054/joyday-detail-view-1.4.2-2d75f34b.js",
+					"@jd/joyday-group-calendar": "https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-joyday-group-calendar/20240809105049/mf-group-calendar-2.0.3-antd1-2b39af21.js",
+					"@jd/joyday-mf-main": "https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-joyday-mf-main/20240911172119/joyday-2.5.2-8891ab86.js",
+					"@jd/joyday-search": "https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-joyday-search/20240509213159/joyday-search-1.0.1-2c29a39f.js",
+					"@jd/jsmf-joyday-comps": "https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-jsmf-joyday-comps/20240912144524/jd-jsmf-joyday-comps-2.1.29-dev.6-08cfb0c7.js",
+					"@jd/jsmf_root-config": "https://storage.360buyimg.com/jsmf-prod/jsmf_root-config/jd_jsmf-root-config-0.0.4-0.js",
+					"@jd/jsmf_utils": "https://joyspace-s3.jd.com/fe-assets/eemf/jsmf-prod/jd-jsmf_utils/20240729142730/jd-jsmf_utils-1.0.6-1-e480da71.js"
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<script src="https://cdn.jsdelivr.net/npm/import-map-overrides@3.1.1/dist/import-map-overrides.js"></script>
+		<!-- <import-map-overrides-full
+			trigger-position="bottom-left"
+			dev-libs
+		></import-map-overrides-full> -->
+
+		<script>
+            window.importMapOverrides.enableUI()
+			const dom = document
+				.querySelector("import-map-overrides-full")
+				.shadowRoot.querySelector(".imo-trigger");
+			let isDragging = false;
+			let offsetX, offsetY;
+
+			dom.addEventListener("mousedown", startDragging);
+			document.addEventListener("mousemove", drag);
+			document.addEventListener("mouseup", stopDragging);
+
+			function constrainToScreen(left, top) {
+				const screenWidth = window.innerWidth;
+				const screenHeight = window.innerHeight;
+				const domRect = dom.getBoundingClientRect();
+
+				if (left + domRect.width > screenWidth) {
+					dom.style.left = (screenWidth - domRect.width) + "px";
+				} else if (left < 0) {
+					dom.style.left = "0px";
+				} else {
+					dom.style.left = left + "px";
+				}
+
+				if (top + domRect.height > screenHeight) {
+					dom.style.top = (screenHeight - domRect.height) + "px";
+				} else if (top < 0) {
+					dom.style.top = "0px";
+				} else {
+					dom.style.top = top + "px";
+				}
+			}
+
+			function drag(e) {
+				if (isDragging) {
+					const left = e.clientX - offsetX;
+					const top = e.clientY - offsetY;
+					constrainToScreen(left, top);
+				}
+			}
+
+			function startDragging(e) {
+				isDragging = true;
+				const rect = dom.getBoundingClientRect();
+				offsetX = e.clientX - rect.left;
+				offsetY = e.clientY - rect.top;
+			}
+
+			function stopDragging() {
+				isDragging = false;
+			}
+		</script>
+		</script>
+	</body>
+</html>

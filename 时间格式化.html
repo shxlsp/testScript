@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const startTime = +new Date('2024-10-11 20:00');
+        const endTime = +new Date('2024-10-11 23:00');
+        function formatTimeRange(startTime, endTime, locale = 'zh-CN') {
+            const startDate = new Date(startTime);
+            const endDate = new Date(endTime);
+            
+            const startYear = startDate.getFullYear();
+            const endYear = endDate.getFullYear();
+            const startMonth = startDate.getMonth() + 1;
+            const endMonth = endDate.getMonth() + 1;
+            const startDay = startDate.getDate();
+            const endDay = endDate.getDate();
+            
+            // 补零函数
+            const padZero = (num) => num < 10 ? `0${num}` : num;
+            
+            // 获取时分
+            const getTime = (date) => {
+                return `${padZero(date.getHours())}:${padZero(date.getMinutes())}`;
+            };
+
+            // 根据语言获取日期格式
+            const getDateFormat = (year, month, day, showYear = true) => {
+                if (locale.startsWith('zh')) {
+                    return `${showYear ? year + '年' : ''}${padZero(month)}月${padZero(day)}日`;
+                } else if (locale.startsWith('ja')) {
+                    return `${showYear ? year + '年' : ''}${padZero(month)}月${padZero(day)}日`;
+                } else if (locale.startsWith('ko')) {
+                    return `${showYear ? year + '년 ' : ''}${padZero(month)}월 ${padZero(day)}일`;
+                } else {
+                    // 英语和其他语言使用通用格式
+                    const monthNames = new Intl.DateTimeFormat(locale, { month: 'short' }).format(new Date(year, month - 1));
+                    return `${monthNames} ${padZero(day)}${showYear ? ', ' + year : ''}`;
+                }
+            };
+            
+            // 跨年
+            if (startYear !== endYear) {
+                return `${getDateFormat(startYear, startMonth, startDay)} ${getTime(startDate)} - ${getDateFormat(endYear, endMonth, endDay)} ${getTime(endDate)}`;
+            }
+            
+            // 跨天
+            if (startMonth !== endMonth || startDay !== endDay) {
+                return `${getDateFormat(startYear, startMonth, startDay, false)} ${getTime(startDate)} - ${getDateFormat(endYear, endMonth, endDay, false)} ${getTime(endDate)}`;
+            }
+            
+            // 同一天
+            return `${getDateFormat(startYear, startMonth, startDay, false)} ${getTime(startDate)} - ${getTime(endDate)}`;
+        }
+
+        // 测试
+        console.log(formatTimeRange(startTime, endTime)); // 输出: "10月11日 20:00 - 23:00"
+        console.log(formatTimeRange(+new Date('2024-10-11 20:00'), +new Date('2024-10-12 20:00')));
+        console.log(formatTimeRange(+new Date('2024-10-11 20:00'), +new Date('2024-10-12 20:00')));
+        console.log(formatTimeRange(+new Date('2023-10-11 20:00'), +new Date('2024-10-12 20:00')));
+
+    </script>
+</body>
+</html>

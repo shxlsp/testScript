@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>.a{color: #efefef;}</style>
+</head>
+<body>
+    <style>.b{color: #efefef;}</style>
+    <style>.c{color: #efefef;}</style>
+    <script>
+        // document.createElement = () => {
+        //     console.log(123)
+        // }
+    </script>
+    <div class="aaa"></div>
+    <script>
+        // HTMLDocument.__proto__.appendChild
+
+        // const nativeAppendChild = Node.prototype.appendChild;
+        // Node.prototype.appendChild = function(dom) {
+        //     if(dom instanceof HTMLStyleElement){
+        //         dom.className = dom.className? dom.className+ ' aaa': 'aaa';
+        //     }
+        //     nativeAppendChild.call(this, dom)
+        // }
+
+        //test
+
+        // var a = document.createElement('style')
+        // a.innerText = '.aaa{background: #eeeeee}'
+        // document.head.appendChild(a);
+
+        // var b = document.createElement('style')
+        // b.innerText = '.aaa{color: red}'
+        // document.querySelector('div.aaa').appendChild(b);
+
+
+        // var c = document.createElement('div')
+        // c.innerHTML = '123123123'
+        // document.querySelector('div.aaa').appendChild(c);
+
+
+        // var newDocument = new Proxy(document, {
+        //     get: (target, p) => {
+        //         console.log(target, p, '????')
+        //         const value = target[p];
+        //         if (typeof value === 'function') {
+        //         return value.bind(target);
+        //         }
+        //         return value;
+        //     },
+        //     set(target, p, value) {
+        //         if (p === 'title') {
+        //             return true;
+        //         }
+        //         target[p] = value;
+        //         return true;
+        //     },
+        // })
+        // window.oldDocument = document;
+        // window.document = newDocument;
+
+
+    </script>
+</body>
+</html>

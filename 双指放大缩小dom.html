@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .div {
+            width: 300px;
+            height: 300px;
+            background-color: darkcyan;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="div">
+
+    </div>
+    <script>
+
+        // 实现点击拖拽
+        function initDragEvent(element) {
+            let isDragging = false;
+            let startX = 0;
+            let startY = 0;
+            let initialTranslateX = 0;
+            let initialTranslateY = 0;
+
+            element.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                // 获取当前元素的transform值
+                const transform = window.getComputedStyle(element).transform;
+                if (transform !== 'none') {
+                    const matrix = new DOMMatrix(transform);
+                    initialTranslateX = matrix.m41;
+                    initialTranslateY = matrix.m42;
+                }
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                // 计算移动距离
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                
+                // 更新位置
+                const newX = initialTranslateX + deltaX;
+                const newY = initialTranslateY + deltaY;
+                element.style.transform = `translate(${newX}px,${newY}px)`
+                return {
+                    x: newX,
+                    y: newY
+                };
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+        }
+
+
+        initDragEvent( document.querySelector('.div'));
+
+
+
+        initDragEvent
+        window.addEventListener('keydown', (e) => {
+            console.log(e, e.key);
+            if ((e.metaKey || e.ctrlKey) && e.key === "=") {
+                e.preventDefault();
+                console.log('+++++')
+                return;
+            }
+            if ((e.metaKey || e.ctrlKey) && e.key === "-") {
+                e.preventDefault();
+                console.log('------')
+            }
+        });
+        // 封装双指缩放和拖动方法
+        function initTouchGesture(element, container = document.body) {
+            let scale = 1;
+            let translateX = 0;
+            let translateY = 0;
+            const setDomStyle = (scale, translateX, translateY) => {
+                // 应用变换
+                element.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+            }
+
+            // 监听鼠标滚轮/触摸板事件
+            window.addEventListener('wheel', function (e) {
+                e.preventDefault();
+                console.log(e.deltaY, e.deltaX, '?????');
+                // 处理缩放和上下移动
+                if (e.ctrlKey) {
+                    // 双指缩放
+                    if (e.deltaY > 0) {
+                        // 向内收缩
+                        scale = Math.max(0.5, scale - 0.1);
+                    } else {
+                        // 向外扩张
+                        scale = Math.min(2, scale + 0.1);
+                    }
+                    setDomStyle(scale, translateX, translateY);
+                    return
+                }
+
+                // 获取容器和元素的尺寸信息
+                const containerRect = container.getBoundingClientRect();
+                const elementRect = element.getBoundingClientRect();
+
+                // 计算边界
+                const maxX = containerRect.width - elementRect.width * scale;
+                const maxY = containerRect.height - elementRect.height * scale;
+
+                // // 处理斜向移动
+                if (Math.abs(e.deltaX) !== 0 && Math.abs(e.deltaY) !== 0) {
+                    // 计算斜向移动的距离，并应用边界限制
+                    const newX = translateX - e.deltaX;
+                    const newY = translateY - e.deltaY;
+                    translateX = Math.max(Math.min(newX, maxX), 0);
+                    translateY = Math.max(Math.min(newY, maxY), 0);
+                    setDomStyle(scale, translateX, translateY);
+                    return;
+                }
+
+                // 处理左右移动
+                if (e.deltaX !== 0) {
+                    const newX = translateX - e.deltaX;
+                    translateX = Math.max(Math.min(newX, maxX), 0);
+                    setDomStyle(scale, translateX, translateY);
+                    return;
+                }
+
+                // 上下移动
+                const newY = translateY - e.deltaY;
+                translateY = Math.max(Math.min(newY, maxY), 0);
+                setDomStyle(scale, translateX, translateY);
+            });
+        }
+
+        // // 使用示例
+        // const div = document.querySelector('.div');
+        // initTouchGesture(div);
+    </script>
+</body>
+
+</html>

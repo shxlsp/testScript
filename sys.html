@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<!-- <script src="./system.js"></script> -->
+		<script src="./systemjsOld.js"></script>
+		<script>
+			var sysA = new System.constructor();
+
+			const baseMap = {
+				imports: {
+					antd: "https://storage.360buyimg.com/joyspace-statics/npm/antd_4.3.5.min.js",
+					axios:
+						"http://storage.360buyimg.com/joyspace-statics/npm/axios_0.24.0.min.js",
+					moment:
+						"https://storage.360buyimg.com/joyspace-statics/npm/moment_2.29.1.min.js",
+					react:
+						"https://storage.360buyimg.com/joyspace-statics/npm/react.production_16.13.1.min.js",
+					"react-dom":
+						"https://storage.360buyimg.com/joyspace-statics/npm/react-dom_16.13.1.production.min.js",
+					"single-spa":
+						"https://storage.360buyimg.com/joyspace-statics/npm/single-spa_5.9.0.min.js",
+				},
+			};
+
+			const mapMain = {
+				imports: {
+					"@jd/jsmf-joyday-comps":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-jsmf-joyday-comps/20240918202513/jd-jsmf-joyday-comps-2.1.29-dev.6-desktop-9169134c.js",
+					"@jd/jsmf_root-config":
+						"https://storage.360buyimg.com/jsmf-prod/jsmf_root-config/jd_jsmf-root-config-0.0.4-0.js",
+					"@jd/joyday-search":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-joyday-search/20240509213159/joyday-search-1.0.1-2c29a39f.js",
+					"@jd/joyday-mf-main":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-joyday-mf-main/20240911172208/joyday-2.5.2-desktop-f20ca480.js",
+					"@jd/joyday-detail-view":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-joyday-detail-view/20240909200806/joyday-detail-view-1.4.2-desktop-eb3cda46.js",
+					"@jd/ee-user-selection-modal":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-ee-user-selection-modal/20240829203525/jd_ee-user-selection-modal-1.1.16-0-f468e616.js",
+					"@jd/jdit-meetingreserve":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-jdit-meetingreserve/20240816171551/jd-jdit-meetingreserve-1.0.0-desktop-536dbb2f.js",
+					"@jd/jsmf_utils":
+						"https://joyspace-s3.jd.com/fe-assets/eemf/jsmf-prod/jd-jsmf_utils/20240729142730/jd-jsmf_utils-1.0.6-1-e480da71.js",
+				},
+				scopes: {
+					"http://joyday-pre.jd.com/desktop": {
+						"@jd/jsmf-joyday-comps":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-jsmf-joyday-comps/20240918202513/jd-jsmf-joyday-comps-2.1.29-dev.6-desktop-9169134c.js",
+						"@jd/jsmf_root-config":
+							"https://storage.360buyimg.com/jsmf-prod/jsmf_root-config/jd_jsmf-root-config-0.0.4-0.js",
+						"@jd/joyday-search":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-joyday-search/20240509213159/joyday-search-1.0.1-2c29a39f.js",
+						"@jd/joyday-mf-main":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-joyday-mf-main/20240911172208/joyday-2.5.2-desktop-f20ca480.js",
+						"@jd/joyday-detail-view":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-joyday-detail-view/20240909200806/joyday-detail-view-1.4.2-desktop-eb3cda46.js",
+						"@jd/ee-user-selection-modal":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-ee-user-selection-modal/20240829203525/jd_ee-user-selection-modal-1.1.16-0-f468e616.js",
+						"@jd/jdit-meetingreserve":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-jdit-meetingreserve/20240816171551/jd-jdit-meetingreserve-1.0.0-desktop-536dbb2f.js",
+						"@jd/jsmf_utils":
+							"https://joyspace-s3.jd.com/fe-assets/eemf/jsmf-prod/jd-jsmf_utils/20240729142730/jd-jsmf_utils-1.0.6-1-e480da71.js",
+					},
+				},
+			};
+			const map = {
+				imports: {
+					"@jd/process-approval-pc":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-process-approval-pc/20240801204201/process-approval-pc-1.0.4-c11afead.js",
+					"@jd/operations-mgr-common":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-operations-mgr-common/20240417103553/jd-operations-mgr-common-1.0.3-alpha.4-1c8f5f72.js",
+					"react-is":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/global_deps/react-is.production.18.1.0.min.js",
+					"@jd/jsmf_utils":
+						"https://joyspace-s3.jd.com/fe-assets/eemf/jsmf-prod/jd-jsmf_utils/20240729142730/jd-jsmf_utils-1.0.6-1-e480da71.js",
+					"ant-design-vue":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/global_deps/ant-design-vue.2.2.8.min.js",
+					lodash:
+						"https://storage.360buyimg.com/joyspace-statics/npm/lodash_4.17.21.min.js",
+					vue: "https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/global_deps/vue/3.2.23/vue.global.js",
+					"@jd/jsmf_root-config":
+						"https://storage.360buyimg.com/jsmf-prod/jsmf_root-config/jd_jsmf-root-config-0.0.4-1.js",
+					"vue-router":
+						"https://storage.360buyimg.com/joyspace-statics/npm/vue-router-3.5.1.min.js",
+					"@jd/all-workplace":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-all-workplace/20240815135932/jd-all-workplace-1.0.1-a5596478.js",
+					"styled-components":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/global_deps/styled-components.5.3.5.min.js",
+				},
+				scopes: {
+					"http://me-pre.jd.com/me_workplace": {
+						"@jd/process-approval-pc":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-process-approval-pc/20240801204201/process-approval-pc-1.0.4-c11afead.js",
+						"@jd/operations-mgr-common":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-operations-mgr-common/20240417103553/jd-operations-mgr-common-1.0.3-alpha.4-1c8f5f72.js",
+						"react-is":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/global_deps/react-is.production.18.1.0.min.js",
+						"@jd/jsmf_utils":
+							"https://joyspace-s3.jd.com/fe-assets/eemf/jsmf-prod/jd-jsmf_utils/20240729142730/jd-jsmf_utils-1.0.6-1-e480da71.js",
+						"ant-design-vue":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/global_deps/ant-design-vue.2.2.8.min.js",
+						lodash:
+							"https://storage.360buyimg.com/joyspace-statics/npm/lodash_4.17.21.min.js",
+						vue: "https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/global_deps/vue/3.2.23/vue.global.js",
+						"@jd/jsmf_root-config":
+							"https://storage.360buyimg.com/jsmf-prod/jsmf_root-config/jd_jsmf-root-config-0.0.4-1.js",
+						"vue-router":
+							"https://storage.360buyimg.com/joyspace-statics/npm/vue-router-3.5.1.min.js",
+						"@jd/all-workplace":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-all-workplace/20240815135932/jd-all-workplace-1.0.1-a5596478.js",
+						"styled-components":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/global_deps/styled-components.5.3.5.min.js",
+					},
+				},
+			};
+			const mapCalendar = {
+				imports: {
+					"@jd/joyday-group-calendar":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-joyday-group-calendar/20240816171527/mf-group-calendar-2.0.3-1349d404.js",
+					"@jd/jsmf-joyday-comps":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-jsmf-joyday-comps/20240910175748/jd-jsmf-joyday-comps-2.1.29-dev.6-desktop-a479fe1d.js",
+					"@jd/ee-user-selection-modal":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-ee-user-selection-modal/20240829203525/jd_ee-user-selection-modal-1.1.16-0-f468e616.js",
+					"@jd/jsmf_root-config":
+						"https://storage.360buyimg.com/jsmf-prod/jsmf_root-config/jd_jsmf-root-config-0.0.4-0.js",
+					"@jd/jsmf_utils":
+						"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-jsmf_utils/20240318112707/jd-jsmf_utils-1.0.6-1-2512bbd0.js",
+				},
+				scopes: {
+					"http://joyday-pre.jd.com/desktop-group-calendar-test1": {
+						"@jd/joyday-group-calendar":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-joyday-group-calendar/20240816171527/mf-group-calendar-2.0.3-1349d404.js",
+						"@jd/jsmf-joyday-comps":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-jsmf-joyday-comps/20240910175748/jd-jsmf-joyday-comps-2.1.29-dev.6-desktop-a479fe1d.js",
+						"@jd/ee-user-selection-modal":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-prod/jd-ee-user-selection-modal/20240829203525/jd_ee-user-selection-modal-1.1.16-0-f468e616.js",
+						"@jd/jsmf_root-config":
+							"https://storage.360buyimg.com/jsmf-prod/jsmf_root-config/jd_jsmf-root-config-0.0.4-0.js",
+						"@jd/jsmf_utils":
+							"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-jsmf_utils/20240318112707/jd-jsmf_utils-1.0.6-1-2512bbd0.js",
+					},
+				},
+			};
+			// const depMap = {
+			// 	"@jd/joyday-detail-view":
+			// 		"https://fe-assets.s3.cn-north-1.jdcloud-oss.com/eemf/jsmf-pre/jd-joyday-detail-view/20240909201054/joyday-detail-view-1.4.2-2d75f34b.js",
+			// 	antd: "https://storage.360buyimg.com/joyspace-statics/npm/antd_4.3.5.min.js",
+			// };
+			// const globalImports = {
+			// 	imports: {
+			// 		...depMap,
+			// 		react:
+			// 			"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js",
+			// 	},
+			// 	scopes: {
+			// 		"http://www.jd.com": { ...depMap, test: "http://localhost/test.js" },
+			// 	},
+			// };
+			// sysA.addImportMap(globalImports);
+			var sysB = new System.constructor();
+			var sysC = new System.constructor();
+
+			sysA.resolve = function (id, parentUrl) {
+				return System.constructor.prototype.resolve.call(this, id, 'http://joyday-pre.jd.com/desktop');
+			};
+
+
+			sysC.resolve = function (id, parentUrl) {
+				return System.constructor.prototype.resolve.call(this, id, 'http://joyday-pre.jd.com/desktop-group-calendar-test1');
+			};
+
+
+			sysA.addImportMap(baseMap);
+			sysA.addImportMap(mapMain);
+			sysB.addImportMap(map);
+			sysC.addImportMap(mapCalendar);
+			sysA.import("react");
+			sysA.import("react-dom");
+			setTimeout(() => {
+				// sysA.import("@jd/joyday-mf-main");
+				sysA.import("@jd/joyday-mf-main", "joyday-pre.jd.com/desktop");
+			}, 1000);
+			// sysC.import("@jd/joyday-group-calendar");
+			// sysA.import("@jd/joyday-detail-view");
+
+			// sysC.import("@jd/joyday-group-calendar", 'joyday-pre.jd.com/desktop-group-calendar-test1');
+			// sysA.import("@jd/joyday-detail-view", 'joyday-pre.jd.com/desktop');
+		</script>
+	</body>
+</html>
