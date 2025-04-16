@@ -1,0 +1,243 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      body {
+        width: 100%;
+        min-height: 100vh;
+        background-color: rgba(100, 100, 100, 0.2);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .canvasBox {
+        overflow: hidden;
+        border: 1px solid red;
+        box-sizing: border-box;
+      }
+      #my-canvas {
+        transform-origin: 0 0;
+        transform: scale(0.5);
+      }
+      #start,
+      #stop {
+        width: 100px;
+        height: 50px;
+        border-radius: 6px;
+        margin: 10px 0;
+        line-height: 50px;
+        text-align: center;
+        background-color: rgba(96, 96, 96, 0.2);
+      }
+      #start:hover,
+      #stop:hover {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="canvasBox">
+      <canvas id="my-canvas"> </canvas>
+    </div>
+    <div id="start">start</div>
+    <div id="stop">stop</div>
+    <script>
+      const configInfo = {
+        width: 600, //画布宽度
+        height: 200, //画布高度
+        lineWidth: 4, //线条大小
+        linear1: [
+          0,
+          "rgba(181, 21, 135,1)",
+          0.5,
+          "rgba(115, 174, 73,1)",
+          1,
+          "rgba(242, 128, 6,1)",
+        ], //第一条波浪线的渐变色
+        linear2: [0, "rgba(22, 108, 220, 0.6)", 1, "rgba(255, 42, 42, 0.6)"], //第二条波浪线的渐变色
+        linearBg: [0, "rgba(222,222,222,0.3)", 1, "rgba(80,165,222,0.2)"], //波浪背景的渐变色
+        scale: 2, //画布缩放比，定为2，移动端显示更清晰
+        speed: 8, //移动速率
+        _phase: 0,
+        dataLength: 1200, //换算速率的分子参数
+        sampleRate: 16000, //换算速率的分母参数
+      };
+      const canvas = document.querySelector("#my-canvas");
+      const ctx = canvas.getContext("2d");
+      const scale = configInfo.scale;
+      const width = configInfo.width * scale;
+      const height = configInfo.height * scale;
+      canvas.width = width;
+      canvas.height = height;
+      const Box = document.querySelector(".canvasBox");
+      Box.style.width = width / 2 + "px";
+      Box.style.height = height / 2 + "px";
+
+      const GenLinear = (ctx, size, colors, top) => {
+        const gradient = ctx.createLinearGradient(
+          0,
+          0,
+          top ? 0 : size,
+          top ? size : 0
+        );
+        for (let i = 0; i < colors.length; ) {
+          gradient.addColorStop(colors[i++], colors[i++]);
+        }
+        return gradient;
+      };
+      const CanvasGradient1 = GenLinear(
+        ctx,
+        configInfo.width,
+        configInfo.linear1
+      );
+      const CanvasGradient2 = GenLinear(
+        ctx,
+        configInfo.width,
+        configInfo.linear2
+      );
+      const LinearBg = GenLinear(
+        ctx,
+        configInfo.height,
+        configInfo.linearBg,
+        true
+      );
+      /*TODO:计算出每个位置点的y轴大小，存放进数组备用 ，计算公式：*/
+      const GenPath = (frequency, amplitude, phase) => {
+        const rtv = [];
+        const maxAmplitude = (configInfo.height * scale) / 2;
+        for (let x = 0; x < width; x += scale) {
+          /* 公式换算每个位移点的y轴大小 */
+          const scaling =
+            (1 + Math.cos(Math.PI + (x / width) * 2 * Math.PI)) / 2;
+          const y =
+            scaling *
+              maxAmplitude *
+              amplitude *
+              Math.sin(2 * Math.PI * (x / width) * frequency + phase) +
+            maxAmplitude;
+          rtv.push(y);
+        }
+        return rtv;
+      };
+      const HandleInput = (powerLevel) => {
+        const speedx =
+          (configInfo.speed * configInfo.dataLength) / configInfo.sampleRate;
+        const phase = (configInfo._phase -= speedx); //位移速度
+        const amplitude = powerLevel / 100;
+        const path1 = GenPath(2, amplitude, phase);
+        const path2 = GenPath(1.8, amplitude, phase + speedx * 5);
+        //清除矩形画布
+        ctx.clearRect(0, 0, width, height);
+        //绘制包围背景
+        ctx.beginPath();
+        for (var i = 0, x = 0; x < width; i++, x += scale) {
+          if (x == 0) {
+            ctx.moveTo(x, path1[i]);
+          } else {
+            ctx.lineTo(x, path1[i]);
+          }
+        }
+        i--;
+        for (let x = width - 1; x >= 0; i--, x -= scale) {
+          ctx.lineTo(x, path2[i]);
+        }
+        ctx.closePath();
+        ctx.fillStyle = LinearBg;
+        ctx.fill();
+        //绘制两条波浪线
+        DrawPath(path2, CanvasGradient2);
+        DrawPath(path1, CanvasGradient1);
+      };
+      /* 画线 */
+      const DrawPath = (path, linear) => {
+        ctx.beginPath();
+        for (let i = 0, x = 0; x < width; i++, x += scale) {
+          if (x == 0) {
+            ctx.moveTo(x, path[i]);
+          } else {
+            ctx.lineTo(x, path[i]);
+          }
+        }
+        ctx.lineWidth = configInfo.lineWidth * scale;
+        ctx.strokeStyle = linear;
+        ctx.stroke();
+      };
+      /* TODO: PL参数用来控制波动的高低幅度大小，范围0~100 */
+      let PL = 0;
+      let flag = false;
+      let animationId = null;
+      HandleInput(PL);
+      /* web动画api执行 */
+      const RequestAnimFrame = () => {
+        animationId = window.requestAnimationFrame((t) => {
+          if (PL === 100) flag = false;
+          if (PL === 0) flag = true;
+          if (PL % 6 === 0) HandleInput(PL);
+          RequestAnimFrame();
+          if (flag) PL++;
+          if (!flag) PL--;
+        });
+      };
+      const ClearAnimation = () => {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      };
+      const domStart = document.getElementById("start");
+      const domStop = document.getElementById("stop");
+      domStart.addEventListener(
+        "click",
+        function () {
+          RequestAnimFrame();
+        },
+        false
+      );
+      domStop.addEventListener(
+        "click",
+        function () {
+          ClearAnimation();
+        },
+        false
+      );
+    </script>
+  </body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      ctx.save();
+      const size = 800;
+
+      var imgData = ctx.createImageData(size, size);
+      this.tx = 0;
+      for (var x = 0; x < size; x++) {
+        this.ty = 0;
+        for (var y = 0; y < size; y++) {
+          // noise 随机生成一个 alpha 值
+          const alpha =
+            (this.noise.noise3D(this.tx, this.ty, this.tz) + 0.5) * 255;
+          const index = (x + y * size) * 4;
+          imgData.data[index + 3] = alpha;
+          this.ty += 0.01;
+        }
+        this.tx += 0.01;
+      }
+      ctx.putImageData(imgData, 0, 0);
+      ctx.restore();
+      this.tz += 0.01;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Dial with Rotating Arc Highlight</title>
+    <style>
+        /* 表盘容器 */
+       .dial {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: #333;
+            margin: 50px auto;
+            overflow: hidden;
+        }
+
+        /* 圆弧高光 */
+       .dial::before {
+            content: "";
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 80%;
+            border: 10px solid rgba(255, 255, 255, 0.9);
+            border-top-color: transparent;
+            border-right-color: transparent;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.8);
+            animation: rotate 3s linear infinite, brightnessChange 3s ease-in-out infinite;
+        }
+
+        /* 旋转动画 */
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 亮度变化动画 */
+        @keyframes brightnessChange {
+            0% {
+                box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.8);
+            }
+            50% {
+                box-shadow: 0 0 40px 10px rgba(255, 255, 255, 1);
+            }
+            100% {
+                box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.8);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dial"></div>
+</body>
+
+</html>

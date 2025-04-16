@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>渐变圆</title>
+  </head>
+  <body>
+    <canvas
+      id="myCanvas"
+      width="400"
+      height="400"
+      style="border: 1px solid #000"
+    ></canvas>
+    <script>
+      const canvas = document.getElementById("myCanvas");
+      const ctx = canvas.getContext("2d");
+
+      // 创建渐变
+      const gradient = ctx.createRadialGradient(30, 30, 20, 40, 40, 40);
+      gradient.addColorStop(0, "red");
+      gradient.addColorStop(1, "blue");
+
+      // 绘制圆形
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(40, 40, 40, 0, Math.PI * 2);
+      ctx.fill();
+    </script>
+  </body>
+</html>

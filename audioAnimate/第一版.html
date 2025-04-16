@@ -1,0 +1,274 @@
+<!-- <!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>音频随动动画</title>
+
+        <style>
+            .avatar-container {
+                position: relative;
+                width: 200px;
+                height: 200px;
+                top: 300px;
+                left: 400px;
+            }
+
+            .avatar {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            .animation-svg {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            .circle-stroke {
+                fill: none;
+                stroke-linecap: round;
+                stroke-dasharray: 100 100;
+                animation: dash 5s linear infinite;
+                transition: stroke-dashoffset .1s linear;
+            }
+
+            .circle-stroke:nth-child(1) {
+                stroke: cyan;
+                transform: rotate(0deg);
+            }
+
+            .circle-stroke:nth-child(2) {
+                stroke: lime;
+                transform: rotate(120deg);
+            }
+
+            .circle-stroke:nth-child(3) {
+                stroke: magenta;
+                transform: rotate(240deg);
+            }
+
+            /* @keyframes dash {
+                to {
+                    stroke-dashoffset: -100;
+                }
+            } */
+        </style>
+    </head>
+
+    <body>
+        <button id="playButton">播放音频</button>
+        <div class="avatar-container">
+            <img
+                src="data:image/jpeg;base64,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"
+                alt="头像"
+                class="avatar"
+            />
+            <svg class="animation-svg" viewBox="0 0 200 200">
+                <circle class="circle-stroke" cx="100" cy="100" r="90" stroke-width="5"></circle>
+                <circle class="circle-stroke" cx="100" cy="100" r="90" stroke-width="5"></circle>
+                <circle class="circle-stroke" cx="100" cy="100" r="90" stroke-width="5"></circle>
+            </svg>
+        </div>
+        <script>
+            const playButton = document.getElementById('playButton');
+            const audio = new Audio('http://music.163.com/song/media/outer/url?id=447925558.mp3');
+            audio.crossOrigin = 'anonymous';
+            audio.volume = 0.01;
+            let audioContext;
+            let source;
+            let analyser;
+
+            playButton.addEventListener('click', async function () {
+                try {
+                    // 创建音频上下文
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    source = audioContext.createMediaElementSource(audio);
+                    analyser = audioContext.createAnalyser();
+
+                    audio.loop = true;
+                    source.connect(analyser);
+                    analyser.connect(audioContext.destination);
+                    audio.volume = 1;
+
+                    // 等待音频上下文激活
+                    await audioContext.resume();
+
+                    // 播放音频
+                    await audio.play();
+
+                    function update() {
+                        const bufferLength = analyser.frequencyBinCount;
+                        const dataArray = new Uint8Array(bufferLength);
+                        analyser.getByteFrequencyData(dataArray);
+
+                        const averageFrequency = dataArray.reduce((sum, value) => sum + value, 0) / bufferLength;
+                        // console.log(averageFrequency, '????averageFrequency');
+                        const circleStrokes = document.querySelectorAll('.circle-stroke');
+
+                        circleStrokes.forEach((stroke, index) => {
+                            // 根据音频数据调整线条的dash offset
+                            const offset = (averageFrequency / 255) * 200 - 100;
+                            // console.log(stroke,'???',offset.toString())
+                            stroke.style.strokeDashoffset = offset.toString();
+
+                            // 根据音频数据调整线条的透明度
+                            const opacity = averageFrequency / 255 + 0.2;
+                            stroke.style.opacity = opacity;
+                        });
+
+                        requestAnimationFrame(update);
+                    }
+                    update();
+                } catch (error) {
+                    console.error('音频播放或上下文创建失败:', error);
+                }
+            });
+        </script>
+    </body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>音频随动动画</title>
+        <style>
+            .avatar-container {
+                position: relative;
+                width: 200px;
+                height: 200px;
+            }
+
+            .avatar {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            .animation-svg {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            .circle-stroke {
+                fill: none;
+                stroke-linecap: round;
+                stroke-dasharray: 100 100;
+                animation: dash 5s linear infinite;
+            }
+
+            .circle-stroke:nth-child(1) {
+                stroke: cyan;
+                transform: rotate(0deg);
+            }
+
+            .circle-stroke:nth-child(2) {
+                stroke: lime;
+                transform: rotate(120deg);
+            }
+
+            .circle-stroke:nth-child(3) {
+                stroke: magenta;
+                transform: rotate(240deg);
+            }
+
+            /* @keyframes dash {
+                to {
+                    stroke-dashoffset: -100;
+                }
+            } */
+        </style>
+    </head>
+
+    <body>
+        <button id="playButton">播放音频</button>
+        <div class="avatar-container">
+            <img
+                src="data:image/jpeg;base64,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"
+                alt="头像"
+                class="avatar"
+            />
+            <svg class="animation-svg" viewBox="0 0 200 200">
+                <circle class="circle-stroke" cx="100" cy="100" r="90" stroke-width="5"></circle>
+                <circle class="circle-stroke" cx="100" cy="100" r="90" stroke-width="5"></circle>
+                <circle class="circle-stroke" cx="100" cy="100" r="90" stroke-width="5"></circle>
+            </svg>
+        </div>
+        <script>
+            const playButton = document.getElementById('playButton');
+            const audio = new Audio('http://music.163.com/song/media/outer/url?id=447925558.mp3');
+            audio.crossOrigin = 'anonymous';
+            let audioContext;
+            let source;
+            let analyser;
+
+            playButton.addEventListener('click', async function () {
+                try {
+                    // 创建音频上下文
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    source = audioContext.createMediaElementSource(audio);
+                    analyser = audioContext.createAnalyser();
+
+                    audio.loop = true;
+                    source.connect(analyser);
+                    analyser.connect(audioContext.destination);
+                    audio.volume = 1;
+
+                    // 等待音频上下文激活
+                    await audioContext.resume();
+
+                    // 播放音频
+                    await audio.play();
+
+                    // 设置分析器的fftSize，影响频率数据的精度
+                    analyser.fftSize = 2048;
+                    const bufferLength = analyser.frequencyBinCount;
+                    const frequencyData = new Uint8Array(bufferLength);
+
+                    function update() {
+                        requestAnimationFrame(update);
+
+                        // 获取频率数据
+                        analyser.getByteFrequencyData(frequencyData);
+
+                        // 简单计算低频和高频的平均值（可根据需要调整频段范围）
+                        const lowFreqSum = frequencyData.slice(0, bufferLength / 4).reduce((sum, val) => sum + val, 0);
+                        const highFreqSum = frequencyData
+                            .slice((bufferLength * 3) / 4)
+                            .reduce((sum, val) => sum + val, 0);
+                        const lowFreqAverage = lowFreqSum / (bufferLength / 4);
+                        const highFreqAverage = highFreqSum / (bufferLength / 4);
+
+                        const circleStrokes = document.querySelectorAll('.circle-stroke');
+
+                        // 根据低频数据调整线条的粗细
+                        const strokeWidth = 2 + (lowFreqAverage / 255) * 4;
+
+                        // 根据高频数据调整线条的dash offset速度（模拟闪烁效果）
+                        const dashOffsetSpeed = (highFreqAverage / 255) * 2 - 1;
+                        const currentDashoffset = parseInt(circleStrokes[0].style.strokeDashoffset) || 0;
+
+                        // 根据整体频率数据调整线条的透明度
+                        const averageFrequency = (lowFreqAverage + highFreqAverage) / 2;
+                        const opacity = averageFrequency / 255;
+                        circleStrokes.forEach((stroke, index) => {
+                            stroke.style.strokeWidth = strokeWidth + 'px';
+                            stroke.style.strokeDashoffset = (currentDashoffset + dashOffsetSpeed).toString();
+                            stroke.style.opacity = opacity;
+                        });
+                        document.querySelector('.animation-svg').style.transform = `scale(${1 + opacity})`;
+                    }
+                    update();
+                } catch (error) {
+                    console.error('音频播放或上下文创建失败:', error);
+                }
+            });
+        </script>
+    </body>
+</html>
